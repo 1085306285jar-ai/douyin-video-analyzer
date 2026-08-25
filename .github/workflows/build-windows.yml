@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -26,3 +29,20 @@ jobs:
           path: dist/抖音视频AI解析工具.exe
           if-no-files-found: error
           compression-level: 0
+      - name: Publish direct-download release
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $BuiltExe = Get-ChildItem -Path dist -Filter "*.exe" -File | Select-Object -First 1
+          if (-not $BuiltExe) { throw "No EXE was found for release publishing." }
+          $ReleaseExe = Join-Path (Resolve-Path dist) "DouyinVideoAnalyzer-v1.0-Windows-x64.exe"
+          Copy-Item -Path $BuiltExe.FullName -Destination $ReleaseExe -Force
+
+          gh release view v1.0.0 --repo "${{ github.repository }}" *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload v1.0.0 $ReleaseExe --clobber --repo "${{ github.repository }}"
+          } else {
+            gh release create v1.0.0 $ReleaseExe --repo "${{ github.repository }}" --title "Douyin Video Analyzer v1.0.0" --notes "Windows x64 standalone EXE. Includes the offline speech model and has passed packaged startup and GUI smoke tests." --latest
+          }
+          if ($LASTEXITCODE -ne 0) { throw "GitHub release publishing failed with exit code $LASTEXITCODE." }
