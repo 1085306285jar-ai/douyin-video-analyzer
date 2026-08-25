@@ -52,10 +52,11 @@ Write-Host "[6/7] Building the Windows one-file executable..."
 & $VenvPython -m PyInstaller --noconfirm --clean --workpath $BuildDir --distpath $DistDir DouyinAnalyzer.spec
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed with exit code $LASTEXITCODE." }
 
-$ExePath = Join-Path $DistDir "抖音视频AI解析工具.exe"
-if (-not (Test-Path $ExePath)) {
-    throw "Build finished without the expected EXE."
+$ExeCandidates = @(Get-ChildItem -Path $DistDir -Filter "*.exe" -File)
+if ($ExeCandidates.Count -ne 1) {
+    throw "Build produced $($ExeCandidates.Count) EXE files; exactly one was expected."
 }
+$ExePath = $ExeCandidates[0].FullName
 
 Write-Host "[7/7] Running packaged startup verification..."
 $ReportPath = Join-Path $env:TEMP "douyin_analyzer_self_test.json"
