@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "douyin-video-analyzer"
+version = "1.0.0"
+description = "Windows desktop app for local transcription and analysis of public Douyin videos"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "yt-dlp==2026.8.19",
+  "faster-whisper==1.2.1",
+  "ctranslate2==4.8.1",
+  "playwright==1.62.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

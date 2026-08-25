@@ -1,0 +1,28 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          architecture: "x64"
+          cache: pip
+      - name: Build and self-test
+        shell: powershell
+        run: .\build\build_windows.ps1
+      - name: Upload single EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: DouyinVideoAnalyzer-Windows-x64
+          path: dist/抖音视频AI解析工具.exe
+          if-no-files-found: error
+          compression-level: 0

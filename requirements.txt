@@ -1,0 +1,5 @@
+# Runtime dependencies. The final Windows EXE embeds these packages.
+yt-dlp==2026.8.19
+faster-whisper==1.2.1
+ctranslate2==4.8.1
+playwright==1.62.0

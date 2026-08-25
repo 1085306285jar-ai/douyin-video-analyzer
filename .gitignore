@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.log
+.venv/
+.build-venv/
+/build/pyinstaller/
+dist/
+temp/
+output/
+model/faster-whisper-base/
+.pytest_cache/
+*.spec.bak

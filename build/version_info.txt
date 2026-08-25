@@ -1,0 +1,30 @@
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(1, 0, 0, 0),
+    prodvers=(1, 0, 0, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+  ),
+  kids=[
+    StringFileInfo([
+      StringTable(
+        u'080404B0',
+        [
+          StringStruct(u'CompanyName', u'Local AI Tools'),
+          StringStruct(u'FileDescription', u'抖音视频 AI 智能解析工具'),
+          StringStruct(u'FileVersion', u'1.0.0'),
+          StringStruct(u'InternalName', u'DouyinVideoAnalyzer'),
+          StringStruct(u'LegalCopyright', u'Copyright (c) 2026'),
+          StringStruct(u'OriginalFilename', u'抖音视频AI解析工具.exe'),
+          StringStruct(u'ProductName', u'抖音视频 AI 智能解析工具'),
+          StringStruct(u'ProductVersion', u'1.0.0')
+        ]
+      )
+    ]),
+    VarFileInfo([VarStruct(u'Translation', [2052, 1200])])
+  ]
+)
