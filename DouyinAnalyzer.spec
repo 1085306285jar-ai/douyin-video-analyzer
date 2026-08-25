@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-from PyInstaller.building.datastruct import Tree
 from PyInstaller.building.splash import Splash
 from PyInstaller.utils.hooks import collect_all, collect_submodules
 
@@ -28,8 +27,10 @@ for package in (
     hiddenimports += package_hidden
 
 hiddenimports += collect_submodules("yt_dlp.extractor")
-datas += Tree(str(ROOT / "model" / "faster-whisper-base"), prefix="model/faster-whisper-base")
-datas += Tree(str(ROOT / "assets"), prefix="assets")
+datas += [
+    (str(ROOT / "model" / "faster-whisper-base"), "model/faster-whisper-base"),
+    (str(ROOT / "assets"), "assets"),
+]
 
 a = Analysis(
     [str(ROOT / "main.py")],
