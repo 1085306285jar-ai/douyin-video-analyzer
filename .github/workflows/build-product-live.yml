@@ -1,17 +1,7 @@
-name: Build Product Live
-on: [workflow_dispatch]
-permissions:
-  contents: read
+name: ProductLive
+on: [push]
 jobs:
-  build:
+  smoke:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: '3.12' }
-      - run: pip install pillow pyinstaller
-      - run: choco install ffmpeg -y\n      - run: pyinstaller --noconfirm --clean --windowed --onedir --name "商品图转动态视频" product_live/main.py\n      - shell: pwsh\n        run: |\n          New-Item -ItemType Directory -Force -Path 'dist/商品图转动态视频/resources'\n          Copy-Item (Get-Command ffmpeg).Source 'dist/商品图转动态视频/resources/ffmpeg.exe'
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 商品图转动态视频-win64
-          path: dist/商品图转动态视频
+      - run: echo ProductLive
