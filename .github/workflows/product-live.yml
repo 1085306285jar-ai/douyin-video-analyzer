@@ -15,11 +15,14 @@ jobs:
           Invoke-WebRequest -Uri 'https://github.com/ZhiQiu-Kinsey/AppleLivePhotoConvert/releases/download/v2.6.0/LivePhotoConvert-v2.6.0-win-x64.zip' -OutFile engine.zip
           Expand-Archive engine.zip -DestinationPath engine
           pyinstaller --noconfirm --clean --windowed --onedir --name "商品图转动态视频" product_live/main.py
-          New-Item -ItemType Directory -Force -Path 'dist/商品图转动态视频/resources/engine'
-          Copy-Item (Get-ChildItem engine -Recurse -Filter LivePhotoConvert.exe | Select-Object -First 1).DirectoryName\* 'dist/商品图转动态视频/resources/engine' -Recurse
+          $target = 'dist/商品图转动态视频/resources/engine'
+          New-Item -ItemType Directory -Force -Path $target
+          $engineExe = Get-ChildItem engine -Recurse -Filter LivePhotoConvert.exe | Select-Object -First 1
+          Copy-Item -Path "$($engineExe.DirectoryName)\*" -Destination $target -Recurse
           Copy-Item 'C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe' 'dist/商品图转动态视频/resources/ffmpeg.exe'
-          Copy-Item 'C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe' 'dist/商品图转动态视频/resources/engine/ffmpeg.exe'
-          Copy-Item (Get-ChildItem C:\ProgramData\chocolatey\lib\exiftool -Recurse -Filter exiftool.exe | Select-Object -First 1).FullName 'dist/商品图转动态视频/resources/engine/exiftool.exe'
+          Copy-Item 'C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe' "$target/ffmpeg.exe"
+          $exif = Get-ChildItem C:\ProgramData\chocolatey\lib\exiftool -Recurse -Filter exiftool.exe | Select-Object -First 1
+          Copy-Item -Path $exif.FullName -Destination "$target/exiftool.exe"
       - uses: actions/upload-artifact@v4
         with:
           name: product-live-win64
