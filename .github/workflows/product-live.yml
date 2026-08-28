@@ -9,7 +9,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install --disable-pip-version-check pillow pyinstaller
-      - run: choco install ffmpeg exiftool -y --no-progress
+      - run: choco install ffmpeg exiftool libheif -y --no-progress
       - shell: pwsh
         run: |
           Invoke-WebRequest -Uri 'https://github.com/ZhiQiu-Kinsey/AppleLivePhotoConvert/releases/download/v2.6.0/LivePhotoConvert-v2.6.0-win-x64.zip' -OutFile engine.zip
@@ -22,7 +22,7 @@ jobs:
           Copy-Item 'C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe' 'dist/商品图转动态视频/resources/ffmpeg.exe'
           Copy-Item 'C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe' "$target/ffmpeg.exe"
           $exif = Get-ChildItem C:\ProgramData\chocolatey\lib\exiftool -Recurse -Filter exiftool.exe | Select-Object -First 1
-          Copy-Item -Path $exif.FullName -Destination "$target/exiftool.exe"
+          Copy-Item -Path $exif.FullName -Destination "$target/exiftool.exe"\n          $heif = Get-ChildItem C:\\ProgramData\\chocolatey\\lib\\libheif -Recurse -Filter heif-enc.exe | Select-Object -First 1\n          Copy-Item -Path "$($heif.DirectoryName)\\*" -Destination $target -Recurse
       - uses: actions/upload-artifact@v4
         with:
           name: product-live-win64
