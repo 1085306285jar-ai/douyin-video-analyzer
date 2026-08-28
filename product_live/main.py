@@ -180,8 +180,8 @@ class ProductLiveApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title(APP_NAME)
-        self.geometry("1000x680")
-        self.minsize(880, 600)
+        self.geometry("1000x700")
+        self.minsize(880, 620)
         self.configure(bg="#111827")
         self.files: list[Path] = []
         self.events: Queue[tuple[str, object]] = Queue()
@@ -191,7 +191,10 @@ class ProductLiveApp(tk.Tk):
         self.ratio = tk.StringVar(value="小红书 3:4")
         self.seconds = tk.StringVar(value="3")
         self.quality = tk.StringVar(value="高清")
-        self.output_kind = tk.StringVar(value="苹果原生 Live Photo")
+        # V1 creates standards-compliant MP4 files that can be posted directly.
+        # Native Apple pairing remains internal until its full offline codec bundle
+        # is verified on a physical iPhone.
+        self.output_kind = tk.StringVar(value="MP4 动态视频")
         self.status = tk.StringVar(value="添加商品图片后，即可批量生成可发布的 MP4。")
         self._style()
         self._build()
@@ -219,11 +222,11 @@ class ProductLiveApp(tk.Tk):
         ttk.Label(top, text="商品图转动态视频", style="Title.TLabel").pack(anchor="w")
         ttk.Label(top, text="保留原商品细节，只加入自然镜头运动。适合小红书、闲鱼商品展示。", style="Hint.TLabel").pack(anchor="w", pady=(7, 0))
 
-        body = ttk.Frame(self, padding=(30, 8, 30, 18))
+        body = ttk.Frame(self, padding=(30, 4, 30, 12))
         body.pack(fill=BOTH, expand=True)
-        left = ttk.Frame(body, style="Panel.TFrame", padding=18)
+        left = ttk.Frame(body, style="Panel.TFrame", padding=16)
         left.pack(side=LEFT, fill=BOTH, expand=True)
-        right = ttk.Frame(body, style="Panel.TFrame", padding=18)
+        right = ttk.Frame(body, style="Panel.TFrame", padding=14)
         right.pack(side=RIGHT, fill=Y, padx=(16, 0))
 
         row = ttk.Frame(left, style="Panel.TFrame")
@@ -249,16 +252,15 @@ class ProductLiveApp(tk.Tk):
         self._field(right, "发布比例", self.ratio, ("小红书 3:4", "闲鱼 1:1", "竖版 9:16", "原图比例"))
         self._field(right, "视频时长", self.seconds, ("2", "3", "4"))
         self._field(right, "清晰度", self.quality, ("高清", "标准", "省空间"))
-        self._field(right, "输出类型", self.output_kind, ("苹果原生 Live Photo", "MP4 动态视频"))
-        ttk.Label(right, text="输出文件夹", style="Panel.TLabel").pack(anchor="w", pady=(20, 6))
+        ttk.Label(right, text="输出文件夹", style="Panel.TLabel").pack(anchor="w", pady=(12, 5))
         ttk.Entry(right, textvariable=self.output_dir, width=30).pack(fill=X)
-        ttk.Button(right, text="选择文件夹", style="Soft.TButton", command=self.pick_output).pack(anchor="w", pady=(8, 22))
+        ttk.Button(right, text="选择文件夹", style="Soft.TButton", command=self.pick_output).pack(anchor="w", pady=(6, 12))
         self.render_button = ttk.Button(right, text="开始批量生成", style="Accent.TButton", command=self.start_render)
         self.render_button.pack(fill=X)
-        ttk.Label(right, text="Live Photo 输出为 iPhone 实况配对；\nMP4 可直接上传。商品外观不会被 AI 修改。", style="Panel.TLabel", foreground="#9CA3AF", justify="left").pack(anchor="w", pady=(13, 0))
+        ttk.Label(right, text="输出标准 MP4，可直接发布。\n商品外观不会被 AI 修改。", style="Panel.TLabel", foreground="#9CA3AF", justify="left").pack(anchor="w", pady=(10, 0))
 
     def _field(self, parent: ttk.Frame, label: str, value: tk.StringVar, values: tuple[str, ...]) -> None:
-        ttk.Label(parent, text=label, style="Panel.TLabel").pack(anchor="w", pady=(16, 6))
+        ttk.Label(parent, text=label, style="Panel.TLabel").pack(anchor="w", pady=(11, 4))
         ttk.Combobox(parent, textvariable=value, values=values, state="readonly", width=26).pack(fill=X)
 
     def add_files(self) -> None:
